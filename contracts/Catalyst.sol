@@ -50,9 +50,16 @@ contract Catalyst is ICatalyst, Ownable {
         emit voterAssigned(_voterAddress, _role);
     }
 
-    function removeVoter(address _voterAddress) public onlyOwner {
+    /**
+     * @notice Remove a voter
+     * @dev update `counters`for `_voterAddress` to 0, and remove voter
+     * @param _voterAddress, address of the voter to be removed
+     */
+    function removeVoter(address _voterAddress) external onlyOwner {
         require(voters.get(_voterAddress) != 0, "Voter doesn't exists");
+        counters[_voterAddress] = 0;
         voters.remove(_voterAddress);
+        emit voterRemoved(_voterAddress);
     }
 
     function setNewRole(uint8 _role, uint8 _voteWeight) public onlyOwner {
