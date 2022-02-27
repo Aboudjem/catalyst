@@ -146,10 +146,18 @@ contract Catalyst is ICatalyst, Ownable {
         return counters[_voter];
     }
 
-    function vote(string memory _name, uint _amount) public {
-        Project project = Project(projects[_name]);
-        require(project.getStatus() == true, "Vote closed");
-        transfer(projects[_name], _amount);
+    /**
+     * @notice Number of Votes affected to this project
+     * @param _name, name of the project
+     * @return uint, number of votes for this `project`
+     */
+    function getProjectVotes(string calldata _name)
+        external
+        view
+        returns (uint)
+    {
+        require(projects[_name].exists, "Project doesn't exist");
+        return projects[_name].votes;
     }
 
     function getRoleWeight(uint8 _role) public view returns(uint8) {
