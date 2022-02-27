@@ -75,9 +75,17 @@ contract Catalyst is ICatalyst, Ownable {
         emit RoleAdded(_role, _voteWeight);
     }
 
-    function setNewProject(string memory _name) public onlyOwner {
-        require(address(projects[_name]) == address(0), "Project already exists");
-        projects[_name] = address(new Project(_name));
+    /**
+     * @notice Create a new Project
+     * @dev update `projects` for a `_name` that represents the project
+     * @param _name, name of the project to be created
+     */
+    function createProject(string memory _name) external onlyOwner {
+        require(projects[_name].exists == false, "Project already exists");
+        projects[_name].exists = true;
+        projects[_name].status = true;
+        projects[_name].votes = 0;
+        emit ProjectAdded(_name);
     }
 
     function closeVote(string memory _name) public onlyOwner {
