@@ -4,9 +4,7 @@ pragma solidity ^0.8.12;
 import "./token/ERC20.sol";
 import "./access/Ownable.sol";
 import "./utils/IterableMapping.sol";
-import "hardhat/console.sol";
-
-//import "@openzeppelin/contracts/utils/structs/EnumerableMap.sol";
+import "./ICatalyst.sol";
 
 contract Catalyst is ERC20, Ownable {
 
