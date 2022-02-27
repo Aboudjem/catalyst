@@ -111,12 +111,39 @@ contract Catalyst is ICatalyst, Ownable {
         }
     }
 
-    function pruneVoters() public onlyOwner {
-        for(uint i = 0; i < voters.size(); i++) {
+    /**
+     * @notice Prune Voters, remove all voting points for each voters
+     * @dev set `counters` for each `voter` to `0`
+     */
+    function pruneVoters() external onlyOwner {
+        for (uint i = 0; i < voters.size(); i++) {
             address voter = voters.getKeyAtIndex(i);
-            console.log("Address: '%s' has '%s' vote weight", voter, roles[voters.get(voter)]);
-            _burn(voter, balanceOf(voter));
+            counters[voter] = 0;
+            emit VotingPointsUpdated(voter, 0);
         }
+    }
+
+    /**
+     * @notice Vote for the `_projectName` with the `_amount` of voting points
+     * @dev sub `counters` for `_amount` of voting points and add it to the `project`
+     * @param _projectName, name of the project to be voted
+     * @param _amount, amount of voting points to be affected to the project
+     */
+    function vote(string memory _projectName, uint _amount) external {
+        require(projects[_projectName].status == true, "Vote closed");
+        require(counters[_msgSender()] >= _amount, "Not enough vote");
+        counters[_msgSender()] -= _amount;
+        projects[_projectName].votes += _amount;
+        emit Voted(_projectName, _msgSender(), _amount);
+    }
+
+    /**
+     * @notice Number of Voting points for the `_voter`
+     * @param _voter, address of the voter
+     * @return uint, amount of voting point for this `_voter`
+     */
+    function getVotingPoints(address _voter) external view returns (uint) {
+        return counters[_voter];
     }
 
     function vote(string memory _name, uint _amount) public {
