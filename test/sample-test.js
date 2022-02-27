@@ -205,9 +205,17 @@ describe("Incubation", function () {
     expect(await incubation.balanceOf(addresses[10])).to.equal("1000");
   });
 
-  it("Should fail paying no-expert wallet", async () => {
+  it("Should fail paying no-expert wallet using transfer", async () => {
     await expect(
       incubation.connect(accounts[10]).transfer(addresses[9], "1000")
+    ).to.be.revertedWith("Not a valid expert");
+  });
+
+  it("Should fail paying no-expert wallet using transfer", async () => {
+    await incubation.connect(accounts[10]).approve(addresses[9], "1000");
+
+    await expect(
+      incubation.transferFrom(addresses[10], addresses[9], "1000")
     ).to.be.revertedWith("Not a valid expert");
   });
 
