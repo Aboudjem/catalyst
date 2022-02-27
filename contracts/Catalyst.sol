@@ -178,4 +178,8 @@ contract Catalyst is ICatalyst, Ownable {
         return voters.get(_voterAddress);
     }
 
+    function _assignVoter(address _voterAddress, uint8 _role) private {
+        require(roles[_role] != 0, "Trying to assign a non-existing role");
+        voters.set(_voterAddress, _role);
+    }
 }
