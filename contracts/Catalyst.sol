@@ -99,11 +99,15 @@ contract Catalyst is ICatalyst, Ownable {
         emit ProjectClosed(_name);
     }
 
-    function setVoters() public onlyOwner {
-        for(uint i = 0; i < voters.size(); i++) {
+    /**
+     * @notice Set Voters, assign for each `voter` voting points corresponding to its role
+     * @dev update `counters` for each `voter` with voting points
+     */
+    function setVoters() external onlyOwner {
+        for (uint i = 0; i < voters.size(); i++) {
             address voter = voters.getKeyAtIndex(i);
-            console.log("Address: '%s' has '%s' vote weight", voter, roles[voters.get(voter)]);
-            _mint(voter, roles[voters.get(voter)]);
+            counters[voter] = roles[voters.get(voter)];
+            emit VotingPointsUpdated(voter, counters[voter]);
         }
     }
 
