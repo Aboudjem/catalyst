@@ -10,11 +10,24 @@ contract Incubation is ERC20, Ownable {
 
     mapping(address => bool) private _isExpert;
 
+    event UpdatedExpertStatus(address _expertAddress, bool _status);
+
+    function transfer(address _address, uint _amount)
+        public
+        virtual
+        override
+        returns (bool)
+    {
+        require(_isExpert[_address], "Not a valid expert");
+        return super.transfer(_address, _amount);
+    }
+
     function whitelistExpert(address _expertAddress, bool _status)
         external
         onlyOwner
     {
         _isExpert[_expertAddress] = _status;
+        emit UpdatedExpertStatus(_expertAddress, _status);
     }
 
     function sendToProposer(address _proposer, uint _amount)
@@ -26,15 +39,5 @@ contract Incubation is ERC20, Ownable {
 
     function isExpert(address _address) external view returns (bool) {
         return _isExpert[_address];
-    }
-
-    function transfer(address _address, uint _amount)
-        public
-        virtual
-        override
-        returns (bool)
-    {
-        require(_isExpert[_address], "Not a valid expert");
-        return super.transfer(_address, _amount);
     }
 }
