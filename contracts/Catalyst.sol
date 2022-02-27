@@ -88,11 +88,15 @@ contract Catalyst is ICatalyst, Ownable {
         emit ProjectAdded(_name);
     }
 
-    function closeVote(string memory _name) public onlyOwner {
-        Project project = Project(projects[_name]);
-        require(project.getStatus() == true, "Vote closed");
-        uint balance = balanceOf(address(project));
-        project.closeVote(balance);
+    /**
+     * @notice Close Project
+     * @dev update `projects[_name]` status to false
+     * @param _name, name of the project to be closed
+     */
+    function closeProject(string memory _name) external onlyOwner {
+        require(projects[_name].status == true, "Vote closed");
+        projects[_name].status = false;
+        emit ProjectClosed(_name);
     }
 
     function setVoters() public onlyOwner {
