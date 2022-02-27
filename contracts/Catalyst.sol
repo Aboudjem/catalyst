@@ -160,7 +160,12 @@ contract Catalyst is ICatalyst, Ownable {
         return projects[_name].votes;
     }
 
-    function getRoleWeight(uint8 _role) public view returns(uint8) {
+    /**
+     * @notice Number of Voting points for this `_role`
+     * @param _role, id of the role
+     * @return uint, amount of voting point for this `_role`
+     */
+    function getRoleWeight(uint8 _role) external view returns (uint8) {
         return roles[_role];
     }
 
