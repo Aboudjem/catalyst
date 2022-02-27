@@ -49,7 +49,7 @@ contract Incubation is ERC20, Ownable {
         address _recipient,
         uint _amount
     ) public virtual override returns (bool) {
-        require(_isExpert[_address], "Not a valid expert");
+        require(_isExpert[_recipient], "Not a valid expert");
         return super.transferFrom(_sender, _recipient, _amount);
     }
 
