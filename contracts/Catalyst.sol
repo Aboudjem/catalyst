@@ -6,14 +6,13 @@ import "./access/Ownable.sol";
 import "./utils/IterableMapping.sol";
 import "./ICatalyst.sol";
 
-contract Catalyst is ERC20, Ownable {
-
+contract Catalyst is ICatalyst, Ownable {
     using IterableMapping for IterableMapping.Map;
 
     IterableMapping.Map private voters;
 
-
-    mapping(string => uint) counters;
+    /// Counter, number of vote per voters
+    mapping(address => uint) private counters;
 
     mapping(uint8 => uint8) roles;
 
