@@ -169,7 +169,12 @@ contract Catalyst is ICatalyst, Ownable {
         return roles[_role];
     }
 
-    function getVoterRole(address _voterAddress) public view returns(uint8) {
+    /**
+     * @notice Id of the role affected to this `_voterAddress`
+     * @param _voterAddress, address of the voter
+     * @return uint8, id of the `role` affected to this `_voterAddress`
+     */
+    function getVoterRole(address _voterAddress) external view returns (uint8) {
         return voters.get(_voterAddress);
     }
 
