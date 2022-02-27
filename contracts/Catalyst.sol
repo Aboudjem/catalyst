@@ -35,10 +35,19 @@ contract Catalyst is ICatalyst, Ownable {
         emit voterAssigned(_voterAddress, _role);
     }
 
-    function updateVoter(address _voterAddress, uint8 _role) public onlyOwner {
+    /**
+     * @notice Update a voter and assign a new role
+     * @dev update `counters`for `_voterAddress`, _voterAddress must be a valid voter
+     * @param _voterAddress, address to assign role
+     * @param _role, id of the role to be affected to this voter
+     */
+    function updateVoter(address _voterAddress, uint8 _role)
+        external
+        onlyOwner
+    {
         require(voters.get(_voterAddress) != 0, "Voter doesn't exists");
-        require(roles[_role] != 0, "Trying to assign a non-existing role");
-        voters.set(_voterAddress, _role);
+        _assignVoter(_voterAddress, _role);
+        emit voterAssigned(_voterAddress, _role);
     }
 
     function removeVoter(address _voterAddress) public onlyOwner {
