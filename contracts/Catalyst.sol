@@ -14,18 +14,25 @@ contract Catalyst is ICatalyst, Ownable {
     /// Counter, number of vote per voters
     mapping(address => uint) private counters;
 
-    mapping(uint8 => uint8) roles;
+    /// Vote weight per role
+    mapping(uint8 => uint8) private roles;
 
-    mapping(string => address) projects;
+    /// Link name of the project to its struct (status, vote)
+    mapping(string => Project) private projects;
 
-    constructor(string memory name_, string memory symbol_) ERC20(name_, symbol_) {
-
-    }
-
-    function registerVoter(address _voterAddress, uint8 _role) public onlyOwner {
+    /**
+     * @notice Register a voter and assign a role
+     * @dev update `counters`for `_voterAddress`
+     * @param _voterAddress, address to assign role
+     * @param _role, id of the role to be affected to this voter
+     */
+    function registerVoter(address _voterAddress, uint8 _role)
+        external
+        onlyOwner
+    {
         require(voters.get(_voterAddress) == 0, "Voter already exists");
-        require(roles[_role] != 0, "Trying to assign a non-existing role");
-        voters.set(_voterAddress, _role);
+        _assignVoter(_voterAddress, _role);
+        emit voterAssigned(_voterAddress, _role);
     }
 
     function updateVoter(address _voterAddress, uint8 _role) public onlyOwner {
