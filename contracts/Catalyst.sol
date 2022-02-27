@@ -62,10 +62,17 @@ contract Catalyst is ICatalyst, Ownable {
         emit voterRemoved(_voterAddress);
     }
 
-    function setNewRole(uint8 _role, uint8 _voteWeight) public onlyOwner {
+    /**
+     * @notice Set a new Role and number of voting points to be assigned
+     * @dev update `roles` for a `_voteWeight`
+     * @param _role, id of the role to be created
+     * @param _voteWeight, voting points to be assigned to this role
+     */
+    function addRole(uint8 _role, uint8 _voteWeight) external onlyOwner {
         require(_role > 0, "Cannot assign role 0");
         require(roles[_role] == 0, "Role already exists");
         roles[_role] = _voteWeight;
+        emit RoleAdded(_role, _voteWeight);
     }
 
     function setNewProject(string memory _name) public onlyOwner {
